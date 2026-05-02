@@ -710,7 +710,9 @@ function genPDF() {
       document.getElementById('previewImg').src = pdfDataURL;
       var tip = document.getElementById('overlayTip');
       if (isIOS()) {
-        tip.innerHTML = '📱 <strong>iPhone:</strong><br>「⬇️ 下載 PDF」會在新分頁開啟,在新分頁點「分享 → 儲存到檔案」<br>「📤 分享 PDF」直接傳到 LINE / Email';
+        tip.innerHTML = '📱 <strong>iPhone 兩個按鈕都會叫出分享面板:</strong><br>' +
+          '「⬇️ 下載 PDF」→ 選「<b>儲存到檔案</b>」存到 iPhone<br>' +
+          '「📤 分享 PDF」→ 選 LINE / 訊息 / Email 直接傳出去';
       } else {
         tip.innerHTML = '📱 <strong>Android:</strong><br>「⬇️ 下載 PDF」直接下載到手機<br>「📤 分享 PDF」傳到 LINE / Email';
       }
@@ -739,7 +741,9 @@ function getPDFFilename() {
   return safeName + '_' + new Date().toISOString().slice(0,10) + '.pdf';
 }
 
-// 下載:把 PDF 存到本機(iPhone 走「在新分頁開啟」→ 用戶從那邊「儲存到檔案」;Android 直接下載到 Downloads)
+// 下載:把 PDF 存到本機
+//   iOS: 走 Web Share API,用戶點「儲存到檔案」存到本機(iPhone 上唯一可靠的下載方式)
+//   Android: 直接觸發 <a download> 下載到 Downloads
 function downloadPDF() {
   if (!pdfBlob) return;
   var filename = getPDFFilename();
@@ -747,27 +751,35 @@ function downloadPDF() {
   var ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
   if (ios) {
-    // iOS 對 <a download> 不可靠,改成在新分頁開 PDF
-    // 用戶在新分頁的工具列點「分享」→「儲存到檔案」
+    // iOS: 用 Web Share API,iOS Safari 14+ 都支援
+    if (navigator.canShare) {
+      try {
+        var file = new File([pdfBlob], filename, { type: 'application/pdf' });
+        if (navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: filename })
+            .catch(function(err) {
+              // 用戶取消不算錯誤
+              if (err && err.name !== 'AbortError') {
+                alert('儲存失敗:' + err.message + '\n\n你可以改用「📤 分享 PDF」按鈕');
+              }
+            });
+          return;
+        }
+      } catch (e) {}
+    }
+    // Web Share API 不可用 → 退回新分頁(舊 iOS)
     try {
       var url = URL.createObjectURL(pdfBlob);
-      // 提示用戶新分頁要做什麼
-      var hint = document.getElementById('iosHint');
-      if (!hint) {
-        hint = document.createElement('div');
-        hint.id = 'iosHint';
-        hint.style.cssText = 'position:fixed;left:0;right:0;bottom:0;background:#1B5E20;color:#fff;padding:14px;font-size:13px;text-align:center;z-index:99999;line-height:1.6;';
-        hint.innerHTML = '✅ PDF 已在新分頁開啟<br>在新分頁點「<b>分享</b>」→「<b>儲存到檔案</b>」即可存到 iPhone';
-        document.body.appendChild(hint);
-        setTimeout(function(){ if (hint.parentNode) hint.parentNode.removeChild(hint); }, 8000);
+      var w = window.open(url, '_blank');
+      if (!w) {
+        alert('瀏覽器擋了新分頁,請允許彈出視窗,或改用「📤 分享 PDF」');
       }
-      window.open(url, '_blank');
       setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
     } catch (e) {
-      alert('開啟失敗,請改用「分享」按鈕');
+      alert('開啟失敗,請改用「📤 分享 PDF」按鈕');
     }
   } else {
-    // Android / 桌面:正常 <a download> 下載
+    // Android / 桌面: 標準下載
     try {
       var url = URL.createObjectURL(pdfBlob);
       var link = document.createElement('a');
@@ -791,7 +803,12 @@ function sharePDF() {
     try {
       var file = new File([pdfBlob], filename, { type: 'application/pdf' });
       if (navigator.canShare({ files: [file] })) {
-        navigator.share({ files: [file], title: filename }).catch(function(){});
+        navigator.share({ files: [file], title: filename })
+          .catch(function(err) {
+            if (err && err.name !== 'AbortError') {
+              alert('分享失敗:' + err.message);
+            }
+          });
         return;
       }
     } catch (e) {}
