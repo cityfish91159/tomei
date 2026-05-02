@@ -468,7 +468,8 @@
   <div class="overlay-tip" id="overlayTip"></div>
   <div class="overlay-img-wrap"><img id="previewImg" alt="報價單預覽"></div>
   <div class="overlay-btns">
-    <button type="button" class="overlay-btn overlay-save" onclick="savePDF()">💾 下載 / 分享 PDF</button>
+    <button type="button" class="overlay-btn overlay-save" onclick="downloadPDF()">⬇️ 下載 PDF</button>
+    <button type="button" class="overlay-btn overlay-save" onclick="sharePDF()" style="background:#1976D2;">📤 分享 PDF</button>
     <button type="button" class="overlay-btn overlay-close" onclick="closeOverlay()">✕ 關閉</button>
   </div>
 </div>
@@ -709,9 +710,9 @@ function genPDF() {
       document.getElementById('previewImg').src = pdfDataURL;
       var tip = document.getElementById('overlayTip');
       if (isIOS()) {
-        tip.innerHTML = '📱 <strong>iPhone:</strong>點「下載 / 分享 PDF」叫出分享面板,選「儲存到檔案」或「列印」<br>(下方為預覽圖)';
+        tip.innerHTML = '📱 <strong>iPhone:</strong><br>「⬇️ 下載 PDF」會在新分頁開啟,在新分頁點「分享 → 儲存到檔案」<br>「📤 分享 PDF」直接傳到 LINE / Email';
       } else {
-        tip.innerHTML = '📱 <strong>Android:</strong>點「下載 / 分享 PDF」下載 PDF 檔案<br>(下方為預覽圖)';
+        tip.innerHTML = '📱 <strong>Android:</strong><br>「⬇️ 下載 PDF」直接下載到手機<br>「📤 分享 PDF」傳到 LINE / Email';
       }
       document.getElementById('overlay').classList.add('show');
       window.scrollTo(0, 0);
@@ -730,16 +731,62 @@ function genPDF() {
 var pdfBlob = null;
 var pdfDataURL = null;
 
-function savePDF() {
-  if (!pdfBlob) return;
-  var clientName = (document.querySelector('[data-field="clientName"]') || {}).value || '';
-  if (!clientName) {
-    var firstInfo = document.querySelectorAll('.info-input');
-    if (firstInfo.length) clientName = firstInfo[0].value || '';
-  }
+function getPDFFilename() {
+  var clientField = document.querySelector('[data-field="clientName"]');
+  var clientName = clientField ? clientField.value : '';
+  if (!clientName) clientName = '';
   var safeName = clientName ? clientName.replace(/[\/\\:*?"<>|]/g, '_') : '報價單';
-  var filename = safeName + '_' + new Date().toISOString().slice(0,10) + '.pdf';
+  return safeName + '_' + new Date().toISOString().slice(0,10) + '.pdf';
+}
 
+// 下載:把 PDF 存到本機(iPhone 走「在新分頁開啟」→ 用戶從那邊「儲存到檔案」;Android 直接下載到 Downloads)
+function downloadPDF() {
+  if (!pdfBlob) return;
+  var filename = getPDFFilename();
+  var ua = navigator.userAgent;
+  var ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (ios) {
+    // iOS 對 <a download> 不可靠,改成在新分頁開 PDF
+    // 用戶在新分頁的工具列點「分享」→「儲存到檔案」
+    try {
+      var url = URL.createObjectURL(pdfBlob);
+      // 提示用戶新分頁要做什麼
+      var hint = document.getElementById('iosHint');
+      if (!hint) {
+        hint = document.createElement('div');
+        hint.id = 'iosHint';
+        hint.style.cssText = 'position:fixed;left:0;right:0;bottom:0;background:#1B5E20;color:#fff;padding:14px;font-size:13px;text-align:center;z-index:99999;line-height:1.6;';
+        hint.innerHTML = '✅ PDF 已在新分頁開啟<br>在新分頁點「<b>分享</b>」→「<b>儲存到檔案</b>」即可存到 iPhone';
+        document.body.appendChild(hint);
+        setTimeout(function(){ if (hint.parentNode) hint.parentNode.removeChild(hint); }, 8000);
+      }
+      window.open(url, '_blank');
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+    } catch (e) {
+      alert('開啟失敗,請改用「分享」按鈕');
+    }
+  } else {
+    // Android / 桌面:正常 <a download> 下載
+    try {
+      var url = URL.createObjectURL(pdfBlob);
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    } catch (e) {
+      alert('下載失敗:' + e.message);
+    }
+  }
+}
+
+// 分享:走系統分享面板(LINE / Email / 訊息 ...)
+function sharePDF() {
+  if (!pdfBlob) return;
+  var filename = getPDFFilename();
   if (navigator.canShare) {
     try {
       var file = new File([pdfBlob], filename, { type: 'application/pdf' });
@@ -749,16 +796,9 @@ function savePDF() {
       }
     } catch (e) {}
   }
-  try {
-    var url = URL.createObjectURL(pdfBlob);
-    var link = document.createElement('a');
-    link.href = url; link.download = filename;
-    document.body.appendChild(link); link.click();
-    document.body.removeChild(link);
-    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
-  } catch (e) {
-    alert('下載失敗,請截圖預覽後手動分享');
-  }
+  // 沒有 Web Share API → 退回下載
+  alert('此瀏覽器不支援分享功能,改為下載');
+  downloadPDF();
 }
 
 // ===== 自動暫存 =====
