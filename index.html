@@ -274,6 +274,239 @@
   .screenshot-mode .item-card-empty { display: none !important; }
   .screenshot-mode .notes-area { resize: none !important; padding: 4px 0 !important; }
 
+  .pdf-render-host {
+    position: fixed;
+    left: -12000px;
+    top: 0;
+    width: 794px;
+    background: #eef2ea;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .pdf-sheet {
+    width: 794px;
+    height: 1123px;
+    background: #FDFBF7;
+    color: #20241F;
+    padding: 26px 32px 22px;
+    box-sizing: border-box;
+    font-family: "Noto Sans TC", "Noto Sans CJK TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 0;
+  }
+  .pdf-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 18px;
+    padding: 0 0 9px;
+    border-bottom: 1.5px solid #AEBDA8;
+  }
+  .pdf-brand {
+    font-family: "Noto Serif TC", "Noto Serif CJK TC", "PMingLiU", serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #315F38;
+    line-height: 1;
+  }
+  .pdf-services {
+    margin-top: 6px;
+    font-size: 9.5px;
+    color: #5F6A5D;
+    line-height: 1.35;
+  }
+  .pdf-doc-type {
+    text-align: right;
+    color: #315F38;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .pdf-doc-meta {
+    margin-top: 7px;
+    font-size: 9.5px;
+    color: #5F6A5D;
+    line-height: 1.35;
+    text-align: right;
+  }
+  .pdf-info-grid {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1px solid #D7DED2;
+    background: #FBFCF8;
+  }
+  .pdf-info-cell {
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    min-height: 28px;
+    border-right: 1px solid #D7DED2;
+    border-bottom: 1px solid #D7DED2;
+    align-items: center;
+  }
+  .pdf-info-cell:nth-child(3n) { border-right: 0; }
+  .pdf-info-cell:nth-last-child(-n+3) { border-bottom: 0; }
+  .pdf-info-label {
+    color: #5F6A5D;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 0 8px;
+  }
+  .pdf-info-value {
+    color: #20241F;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 0 8px;
+    word-break: break-word;
+  }
+  .pdf-section-title {
+    margin-top: 12px;
+    color: #315F38;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+    font-size: 11px;
+    table-layout: fixed;
+  }
+  .pdf-table th {
+    background: #F0F4EC;
+    color: #4D594A;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 5px 6px;
+    border: 1px solid #D7DED2;
+  }
+  .pdf-table td {
+    color: #20241F;
+    padding: 5.5px 6px;
+    border: 1px solid #D7DED2;
+    vertical-align: top;
+    line-height: 1.34;
+    word-break: break-word;
+  }
+  .pdf-table .pdf-col-index { width: 34px; text-align: center; }
+  .pdf-table .pdf-col-desc { width: auto; }
+  .pdf-table .pdf-col-qty { width: 52px; text-align: right; }
+  .pdf-table .pdf-col-price,
+  .pdf-table .pdf-col-subtotal { width: 86px; text-align: right; }
+  .pdf-table tr.pdf-empty-row td {
+    height: 21px;
+    color: transparent;
+  }
+  .pdf-summary-wrap {
+    display: grid;
+    grid-template-columns: 1fr 238px;
+    gap: 14px;
+    margin-top: 10px;
+    align-items: start;
+  }
+  .pdf-note-box {
+    border: 1px solid #D7DED2;
+    background: #FBFCF8;
+    min-height: 58px;
+    padding: 8px 10px;
+  }
+  .pdf-note-title {
+    color: #5F6A5D;
+    font-size: 9.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .pdf-note-body {
+    color: #4D594A;
+    font-size: 10.5px;
+    line-height: 1.42;
+    white-space: pre-wrap;
+  }
+  .pdf-total-box {
+    border: 1px solid #AEBDA8;
+    background: #F8FAF4;
+  }
+  .pdf-total-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border-bottom: 1px solid #D7DED2;
+    font-size: 11px;
+    color: #4D594A;
+  }
+  .pdf-total-row:last-child { border-bottom: 0; }
+  .pdf-total-row.grand {
+    min-height: 34px;
+    color: #315F38;
+    font-size: 15px;
+    font-weight: 800;
+    background: #EFF5EB;
+  }
+  .pdf-terms {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1px solid #D7DED2;
+    background: #FBFCF8;
+  }
+  .pdf-term {
+    min-height: 62px;
+    padding: 8px 10px;
+    border-right: 1px solid #D7DED2;
+  }
+  .pdf-term:last-child {
+    border-right: 0;
+  }
+  .pdf-term-title {
+    color: #315F38;
+    font-size: 9.5px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .pdf-term-body {
+    color: #4D594A;
+    font-size: 10px;
+    line-height: 1.45;
+  }
+  .pdf-approval {
+    margin-top: 13px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    color: #5F6A5D;
+    font-size: 10px;
+  }
+  .pdf-approval-cell {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    align-items: end;
+    min-height: 34px;
+  }
+  .pdf-approval-line {
+    border-bottom: 1px solid #B8C4B2;
+    height: 18px;
+  }
+  .pdf-footer {
+    margin-top: auto;
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #D7DED2;
+    color: #6F786C;
+    font-size: 9.5px;
+    line-height: 1.25;
+  }
+  .pdf-continuation {
+    margin-top: 7px;
+    color: #7D877A;
+    font-size: 9.5px;
+    text-align: right;
+  }
+
   .overlay {
     display: none;
     position: fixed;
@@ -336,7 +569,7 @@
 <div class="page" id="page">
   <div class="header">
     <div class="header-top">
-      <div class="brand"><span class="brand-emoji">🌿</span>東美園藝</div>
+      <div class="brand">東美園藝</div>
       <div class="doc-type">報價單</div>
     </div>
     <div class="contact">蔡美慧 ｜ 0928-972-652</div>
@@ -372,17 +605,17 @@
 
   <!-- 診斷橫幅:JS 沒跑的話顯示警告;JS 跑了會被替換成成功訊息 3 秒後隱藏 -->
   <div id="diagBar" style="background:#fff3cd;border-bottom:1px solid #ffe69c;padding:10px 16px;font-size:12px;color:#664d03;line-height:1.6;">
-    ⏳ 初始化中… 如果這行字持續顯示不動,代表 JS 沒跑起來,請告訴我你怎麼打開這個頁面的。
+    初始化中… 如果這行字持續顯示不動,代表 JS 沒跑起來,請告訴我你怎麼打開這個頁面的。
   </div>
   <noscript>
-    <div style="background:#f8d7da;border-bottom:1px solid #f5c2c7;padding:10px 16px;font-size:12px;color:#842029;">
-      ❌ 你的瀏覽器已停用 JavaScript,本報價單無法運作。
+  <div style="background:#f8d7da;border-bottom:1px solid #f5c2c7;padding:10px 16px;font-size:12px;color:#842029;">
+      你的瀏覽器已停用 JavaScript,本報價單無法運作。
     </div>
   </noscript>
 
   <div class="items-section">
     <div class="items-header">
-      <div class="items-title">📝 工程項目 <span id="saveIndicator" style="font-size:10px;color:#888;font-weight:500;margin-left:6px;opacity:0.4;transition:opacity 0.3s;">✓ 已暫存</span></div>
+      <div class="items-title">工程項目 <span id="saveIndicator" style="font-size:10px;color:#888;font-weight:500;margin-left:6px;opacity:0.4;transition:opacity 0.3s;">已暫存</span></div>
       <div class="items-count" id="itemsCount">共 0 項</div>
     </div>
     <!-- 靜態 fallback 項目:就算 JS 掛了至少看得到內容(JS 跑起來會把這些清掉重建) -->
@@ -451,7 +684,7 @@
   </div>
 
   <div class="notes-section">
-    <div class="notes-title">📋 備註</div>
+    <div class="notes-title">備註</div>
     <textarea class="notes-area" rows="3">以上報價均為稅外加
 報價有效期限一個月</textarea>
   </div>
@@ -460,7 +693,7 @@
 
   <div class="actions">
     <button type="button" class="btn btn-clear" onclick="clearAll()">清空重填</button>
-    <button type="button" class="btn btn-img" id="genBtn" onclick="genPDF()">📄 產生 PDF</button>
+    <button type="button" class="btn btn-img" id="genBtn" onclick="genPDF()">產生 PDF</button>
   </div>
 </div>
 
@@ -468,8 +701,8 @@
   <div class="overlay-tip" id="overlayTip"></div>
   <div class="overlay-img-wrap"><img id="previewImg" alt="報價單預覽"></div>
   <div class="overlay-btns">
-    <button type="button" class="overlay-btn overlay-save" onclick="downloadPDF()">⬇️ 下載 PDF</button>
-    <button type="button" class="overlay-btn overlay-save" onclick="sharePDF()" style="background:#1976D2;">📤 分享 PDF</button>
+    <button type="button" class="overlay-btn overlay-save" onclick="downloadPDF()">下載 PDF</button>
+    <button type="button" class="overlay-btn overlay-save" onclick="sharePDF()" style="background:#1976D2;">分享 PDF</button>
     <button type="button" class="overlay-btn overlay-close" onclick="closeOverlay()">✕ 關閉</button>
   </div>
 </div>
@@ -637,9 +870,199 @@ function restoreFromScreenshot(subs) {
   }
 }
 
+function pdfText(value, fallback) {
+  value = value === undefined || value === null ? '' : String(value).trim();
+  return value || (fallback || '');
+}
+
+function pdfNumber(value) {
+  var n = parseFloat(value);
+  return isFinite(n) ? n : 0;
+}
+
+function createPdfEl(tag, className, text) {
+  var el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined && text !== null) el.textContent = text;
+  return el;
+}
+
+function appendPdfInfo(parent, label, value) {
+  var cell = createPdfEl('div', 'pdf-info-cell');
+  cell.appendChild(createPdfEl('div', 'pdf-info-label', label));
+  cell.appendChild(createPdfEl('div', 'pdf-info-value', pdfText(value, '')));
+  parent.appendChild(cell);
+}
+
+function getPrintableItems(data) {
+  var raw = data.items || [];
+  var items = [];
+  for (var i = 0; i < raw.length; i++) {
+    var desc = pdfText(raw[i].desc, '');
+    var qty = pdfNumber(raw[i].qty);
+    var price = pdfNumber(raw[i].price);
+    if (!desc && qty === 0 && price === 0) continue;
+    items.push({ desc: desc, qty: qty, price: price, subtotal: qty * price });
+  }
+  if (!items.length) items.push({ desc: '未填寫工程項目', qty: 0, price: 0, subtotal: 0 });
+  return items;
+}
+
+function computePdfTotals(items) {
+  var subtotal = 0;
+  for (var i = 0; i < items.length; i++) subtotal += items[i].subtotal;
+  return { subtotal: subtotal, tax: subtotal * 0.05, grand: subtotal * 1.05 };
+}
+
+function buildPdfSheet(data, rows, pageNo, totalPages, isLast, totals, rowOffset, rowsPerPage) {
+  var info = data.info || {};
+  var sheet = createPdfEl('section', 'pdf-sheet');
+  sheet.setAttribute('data-pdf-sheet', 'true');
+
+  var top = createPdfEl('div', 'pdf-top');
+  var brandBlock = createPdfEl('div');
+  brandBlock.appendChild(createPdfEl('div', 'pdf-brand', '東美園藝'));
+  brandBlock.appendChild(createPdfEl('div', 'pdf-services', '除草・樹木疏鋸・整姿回縮・圍籬修剪・植栽養護・病蟲害防治'));
+  var docBlock = createPdfEl('div');
+  docBlock.appendChild(createPdfEl('div', 'pdf-doc-type', '報價單'));
+  docBlock.appendChild(createPdfEl('div', 'pdf-doc-meta', '蔡美慧  0928-972-652'));
+  top.appendChild(brandBlock);
+  top.appendChild(docBlock);
+  sheet.appendChild(top);
+
+  var grid = createPdfEl('div', 'pdf-info-grid');
+  appendPdfInfo(grid, '客戶名稱', info.clientName);
+  appendPdfInfo(grid, '報價日期', info.quoteDate);
+  appendPdfInfo(grid, '聯絡電話', info.phone);
+  appendPdfInfo(grid, '有效期限', info.validity);
+  appendPdfInfo(grid, '地址', info.address);
+  appendPdfInfo(grid, '報價編號', info.quoteNo);
+  sheet.appendChild(grid);
+
+  sheet.appendChild(createPdfEl('div', 'pdf-section-title', pageNo > 1 ? '工程項目（續）' : '工程項目'));
+  var table = createPdfEl('table', 'pdf-table');
+  var thead = document.createElement('thead');
+  var headRow = document.createElement('tr');
+  var heads = [
+    ['項次', 'pdf-col-index'],
+    ['工程內容', 'pdf-col-desc'],
+    ['數量', 'pdf-col-qty'],
+    ['單價', 'pdf-col-price'],
+    ['小計', 'pdf-col-subtotal']
+  ];
+  for (var h = 0; h < heads.length; h++) {
+    var th = createPdfEl('th', heads[h][1], heads[h][0]);
+    headRow.appendChild(th);
+  }
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  var tbody = document.createElement('tbody');
+  var minimumTableRows = rows.length;
+  if (isLast && totalPages === 1) {
+    minimumTableRows = rows.length <= 12 ? 20 : Math.max(rows.length, rowsPerPage);
+  }
+  var visibleRows = Math.max(rows.length, minimumTableRows);
+  for (var r = 0; r < visibleRows; r++) {
+    var item = rows[r];
+    var tr = document.createElement('tr');
+    if (item) {
+      tr.appendChild(createPdfEl('td', 'pdf-col-index', String(rowOffset + r + 1)));
+      tr.appendChild(createPdfEl('td', 'pdf-col-desc', item.desc));
+      tr.appendChild(createPdfEl('td', 'pdf-col-qty', item.qty ? String(item.qty) : '-'));
+      tr.appendChild(createPdfEl('td', 'pdf-col-price', item.price ? fmt(item.price) : '-'));
+      tr.appendChild(createPdfEl('td', 'pdf-col-subtotal', item.subtotal ? fmt(item.subtotal) : '-'));
+    } else {
+      tr.className = 'pdf-empty-row';
+      tr.appendChild(createPdfEl('td', 'pdf-col-index', '\u00a0'));
+      tr.appendChild(createPdfEl('td', 'pdf-col-desc', '\u00a0'));
+      tr.appendChild(createPdfEl('td', 'pdf-col-qty', '\u00a0'));
+      tr.appendChild(createPdfEl('td', 'pdf-col-price', '\u00a0'));
+      tr.appendChild(createPdfEl('td', 'pdf-col-subtotal', '\u00a0'));
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  sheet.appendChild(table);
+
+  if (!isLast) {
+    sheet.appendChild(createPdfEl('div', 'pdf-continuation', '續下頁'));
+  } else {
+    var summary = createPdfEl('div', 'pdf-summary-wrap');
+    var noteBox = createPdfEl('div', 'pdf-note-box');
+    noteBox.appendChild(createPdfEl('div', 'pdf-note-title', '備註'));
+    noteBox.appendChild(createPdfEl('div', 'pdf-note-body', pdfText(data.notes, '')));
+    var totalBox = createPdfEl('div', 'pdf-total-box');
+    var rowsData = [
+      ['小計', fmt(totals.subtotal), ''],
+      ['稅金 5%', fmt(totals.tax), ''],
+      ['合計', fmt(totals.grand), 'grand']
+    ];
+    for (var t = 0; t < rowsData.length; t++) {
+      var totalRow = createPdfEl('div', 'pdf-total-row ' + rowsData[t][2]);
+      totalRow.appendChild(createPdfEl('span', '', rowsData[t][0]));
+      totalRow.appendChild(createPdfEl('strong', '', rowsData[t][1]));
+      totalBox.appendChild(totalRow);
+    }
+    summary.appendChild(noteBox);
+    summary.appendChild(totalBox);
+    sheet.appendChild(summary);
+
+    var terms = createPdfEl('div', 'pdf-terms');
+    var termRows = [
+      ['追加項目', '未列項目、追加工程另行報價。'],
+      ['施工安排', '施工日期依現場及天候另約。'],
+      ['付款確認', '完工確認後依約付款。']
+    ];
+    for (var termIndex = 0; termIndex < termRows.length; termIndex++) {
+      var term = createPdfEl('div', 'pdf-term');
+      term.appendChild(createPdfEl('div', 'pdf-term-title', termRows[termIndex][0]));
+      term.appendChild(createPdfEl('div', 'pdf-term-body', termRows[termIndex][1]));
+      terms.appendChild(term);
+    }
+    sheet.appendChild(terms);
+
+    var approval = createPdfEl('div', 'pdf-approval');
+    var customerApproval = createPdfEl('div', 'pdf-approval-cell');
+    customerApproval.appendChild(createPdfEl('span', '', '客戶確認'));
+    customerApproval.appendChild(createPdfEl('span', 'pdf-approval-line', ''));
+    var companyApproval = createPdfEl('div', 'pdf-approval-cell');
+    companyApproval.appendChild(createPdfEl('span', '', '報價確認'));
+    companyApproval.appendChild(createPdfEl('span', 'pdf-approval-line', ''));
+    approval.appendChild(customerApproval);
+    approval.appendChild(companyApproval);
+    sheet.appendChild(approval);
+  }
+
+  var footer = createPdfEl('div', 'pdf-footer');
+  footer.appendChild(createPdfEl('span', '', '東美園藝  蔡美慧  0928-972-652'));
+  footer.appendChild(createPdfEl('span', '', '第 ' + pageNo + ' / ' + totalPages + ' 頁'));
+  sheet.appendChild(footer);
+
+  return sheet;
+}
+
+function buildPrintableQuote(data) {
+  var host = createPdfEl('div', 'pdf-render-host');
+  var items = getPrintableItems(data);
+  var totals = computePdfTotals(items);
+  var rowsPerPage = 16;
+  var totalPages = Math.max(1, Math.ceil(items.length / rowsPerPage));
+  for (var p = 0; p < totalPages; p++) {
+    var start = p * rowsPerPage;
+    var rows = items.slice(start, start + rowsPerPage);
+    host.appendChild(buildPdfSheet(data, rows, p + 1, totalPages, p === totalPages - 1, totals, start, rowsPerPage));
+  }
+  document.body.appendChild(host);
+  return host;
+}
+
+function removePrintableQuote(host) {
+  if (host && host.parentNode) host.parentNode.removeChild(host);
+}
+
 function genPDF() {
   var btn = document.getElementById('genBtn');
-  var page = document.getElementById('page');
   if (typeof html2canvas !== 'function') {
     alert('PDF 元件載入中,請稍候 1-2 秒再試');
     return;
@@ -649,88 +1072,61 @@ function genPDF() {
     return;
   }
   btn.classList.add('generating');
-  btn.textContent = '⏳ 產生中...';
+  btn.textContent = '產生中...';
   calc();
   var pdfSignature = getFormSignature();
   markPDFStale();
-  page.classList.add('screenshot-mode');
-  var subs = prepareForScreenshot(page);
+  var printableHost = buildPrintableQuote(collectFormData());
 
   setTimeout(function() {
-    // 用 desktop 寬度渲染(模擬桌機),讓內容比例接近 A4 直式,減少分頁
-    // A4 直式比例約 1:1.414,用 page 元素 max-width 600px 但實際視窗寬度模擬 800px
-    html2canvas(page, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-      windowWidth: 800,
-      windowHeight: page.scrollHeight
-    }).then(function(canvas) {
-      restoreFromScreenshot(subs);
-      page.classList.remove('screenshot-mode');
+    var jsPDF = window.jspdf.jsPDF;
+    var pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    var sheets = printableHost.querySelectorAll('.pdf-sheet');
+    var firstPreview = null;
+    var job = Promise.resolve();
 
-      // canvas → A4 PDF。A4 = 210 x 297 mm
-      var jsPDF = window.jspdf.jsPDF;
-      var pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
-      var pageW = pdf.internal.pageSize.getWidth();   // 210
-      var pageH = pdf.internal.pageSize.getHeight();  // 297
-      var margin = 8;
-      var maxW = pageW - margin * 2;
-      var maxH = pageH - margin * 2;
+    for (var i = 0; i < sheets.length; i++) {
+      (function(sheet, pageIndex) {
+        job = job.then(function() {
+          return html2canvas(sheet, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#FFFDF8',
+            logging: false,
+            windowWidth: 794,
+            windowHeight: 1123
+          }).then(function(canvas) {
+            if (pageIndex > 0) pdf.addPage();
+            var imgData = canvas.toDataURL('image/jpeg', 0.94);
+            pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+            if (pageIndex === 0) firstPreview = canvas.toDataURL('image/png');
+          });
+        });
+      })(sheets[i], i);
+    }
 
-      // canvas 比例算進 PDF 後該占多大
-      var imgRatio = canvas.height / canvas.width;
-      var imgW = maxW;
-      var imgH = imgW * imgRatio;
-
-      if (imgH <= maxH) {
-        // 一頁裝得下
-        var imgData = canvas.toDataURL('image/jpeg', 0.92);
-        pdf.addImage(imgData, 'JPEG', margin, margin, imgW, imgH);
-      } else {
-        // 太長要分頁:把 canvas 切片
-        var pageCanvasH = canvas.width * (maxH / maxW);  // 每頁能裝的 canvas 像素高
-        var totalPages = Math.ceil(canvas.height / pageCanvasH);
-        for (var pi = 0; pi < totalPages; pi++) {
-          var sliceY = pi * pageCanvasH;
-          var sliceH = Math.min(pageCanvasH, canvas.height - sliceY);
-          var slice = document.createElement('canvas');
-          slice.width = canvas.width;
-          slice.height = sliceH;
-          var sctx = slice.getContext('2d');
-          sctx.fillStyle = '#ffffff';
-          sctx.fillRect(0, 0, slice.width, slice.height);
-          sctx.drawImage(canvas, 0, sliceY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
-          var sliceData = slice.toDataURL('image/jpeg', 0.92);
-          var sliceImgH = imgW * (sliceH / canvas.width);
-          if (pi > 0) pdf.addPage();
-          pdf.addImage(sliceData, 'JPEG', margin, margin, imgW, sliceImgH);
-        }
-      }
-
-      // 預覽圖(用 canvas dataURL,不是 PDF)
+    job.then(function() {
+      removePrintableQuote(printableHost);
       pdfBlob = pdf.output('blob');
-      pdfDataURL = canvas.toDataURL('image/png');
+      pdfDataURL = firstPreview || '';
       lastPDFSignature = pdfSignature;
       document.getElementById('previewImg').src = pdfDataURL;
       var tip = document.getElementById('overlayTip');
       if (isIOS()) {
-        tip.innerHTML = '📱 <strong>iPhone 兩個按鈕都會叫出分享面板:</strong><br>' +
-          '「⬇️ 下載 PDF」→ 選「<b>儲存到檔案</b>」存到 iPhone<br>' +
-          '「📤 分享 PDF」→ 選 LINE / 訊息 / Email 直接傳出去';
+        tip.innerHTML = '<strong>iPhone:</strong><br>' +
+          '「下載 PDF」會叫出分享面板,請選「<b>儲存到檔案</b>」<br>' +
+          '「分享 PDF」可直接傳到 LINE / 訊息 / Email';
       } else {
-        tip.innerHTML = '📱 <strong>Android:</strong><br>「⬇️ 下載 PDF」直接下載到手機<br>「📤 分享 PDF」傳到 LINE / Email';
+        tip.innerHTML = '<strong>Android:</strong><br>「下載 PDF」直接下載到手機<br>「分享 PDF」可傳到 LINE / Email';
       }
       document.getElementById('overlay').classList.add('show');
       window.scrollTo(0, 0);
       btn.classList.remove('generating');
-      btn.textContent = '📄 產生 PDF';
+      btn.textContent = '產生 PDF';
     }).catch(function(err) {
-      restoreFromScreenshot(subs);
-      page.classList.remove('screenshot-mode');
+      removePrintableQuote(printableHost);
       btn.classList.remove('generating');
-      btn.textContent = '📄 產生 PDF';
+      btn.textContent = '產生 PDF';
       alert('產生 PDF 失敗\n' + (err && err.message ? err.message : err));
     });
   }, 80);
@@ -792,7 +1188,7 @@ function downloadPDF() {
             .catch(function(err) {
               // 用戶取消不算錯誤
               if (err && err.name !== 'AbortError') {
-                alert('儲存失敗:' + err.message + '\n\n你可以改用「📤 分享 PDF」按鈕');
+                alert('儲存失敗:' + err.message + '\n\n你可以改用「分享 PDF」按鈕');
               }
             });
           return;
@@ -804,11 +1200,11 @@ function downloadPDF() {
       var url = URL.createObjectURL(pdfBlob);
       var w = window.open(url, '_blank');
       if (!w) {
-        alert('瀏覽器擋了新分頁,請允許彈出視窗,或改用「📤 分享 PDF」');
+        alert('瀏覽器擋了新分頁,請允許彈出視窗,或改用「分享 PDF」');
       }
       setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
     } catch (e) {
-      alert('開啟失敗,請改用「📤 分享 PDF」按鈕');
+      alert('開啟失敗,請改用「分享 PDF」按鈕');
     }
   } else {
     // Android / 桌面: 標準下載
@@ -882,7 +1278,7 @@ function autoSave() {
     }));
     var ind = document.getElementById('saveIndicator');
     if (ind) {
-      ind.textContent = '✓ 已暫存';
+      ind.textContent = '已暫存';
       ind.style.opacity = '1';
       clearTimeout(ind._fadeTimer);
       ind._fadeTimer = setTimeout(function(){ ind.style.opacity = '0.4'; }, 1500);
@@ -977,8 +1373,8 @@ function __init() {
       diag.style.color = '#0f5132';
       diag.style.borderBottom = '1px solid #badbcc';
       var msg = loadedFromDraft
-        ? ('✅ 已還原上次暫存(' + new Date(draft.savedAt).toLocaleString('zh-TW') + ')')
-        : '✅ 載入完成,輸入時會自動暫存';
+        ? ('已還原上次暫存(' + new Date(draft.savedAt).toLocaleString('zh-TW') + ')')
+        : '載入完成,輸入時會自動暫存';
       diag.innerHTML = msg;
       setTimeout(function(){ diag.style.display = 'none'; }, 3500);
     }
@@ -987,7 +1383,7 @@ function __init() {
       diag.style.background = '#f8d7da';
       diag.style.color = '#842029';
       diag.style.borderBottom = '1px solid #f5c2c7';
-      diag.innerHTML = '❌ 初始化失敗:<br><b>' + (e && e.message ? e.message : e) + '</b><br>' +
+      diag.innerHTML = '初始化失敗:<br><b>' + (e && e.message ? e.message : e) + '</b><br>' +
         '<span style="font-size:10px;opacity:0.8;">' + (e && e.stack ? String(e.stack).split('\n').slice(0,3).join(' / ') : '') + '</span>';
     }
     throw e;
