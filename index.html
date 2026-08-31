@@ -54,19 +54,19 @@
     align-items: center;
     margin-bottom: 8px;
   }
-  .brand { font-size: 22px; font-weight: 900; letter-spacing: 2px; }
+  .brand { font-size: 24px; font-weight: 900; letter-spacing: 2px; }
   .brand-emoji { margin-right: 4px; }
   .doc-type {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     background: rgba(255,255,255,0.18);
     padding: 4px 14px;
     border-radius: 20px;
     letter-spacing: 4px;
   }
-  .contact { font-size: 13px; opacity: 0.95; letter-spacing: 1px; }
+  .contact { font-size: 14px; opacity: 0.95; letter-spacing: 1px; }
   .services {
-    margin-top: 6px; font-size: 11px; opacity: 0.75;
+    margin-top: 6px; font-size: 12px; opacity: 0.8;
     letter-spacing: 0.5px; line-height: 1.6;
   }
 
@@ -77,15 +77,16 @@
     background: #fafff5;
     border-bottom: 1px solid #e8f0e0;
   }
+  .info-item { min-width: 0; }
   .info-item label {
-    font-size: 11px; font-weight: 700; color: #666;
+    font-size: 12.5px; font-weight: 700; color: #666;
     display: block; margin-bottom: 4px; letter-spacing: 0.5px;
   }
   .info-input {
     width: 100%;
     border: none; border-bottom: 1.5px dashed #c5d6b8;
     background: transparent;
-    font-family: inherit; font-size: 15px;
+    font-family: inherit; font-size: 17px;
     color: #1B5E20; font-weight: 500;
     padding: 4px 0; outline: none;
     -webkit-appearance: none; appearance: none; border-radius: 0;
@@ -99,8 +100,8 @@
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 4px 10px;
   }
-  .items-title { font-size: 13px; font-weight: 700; color: #2E7D32; letter-spacing: 1px; }
-  .items-count { font-size: 11px; color: #888; font-weight: 500; }
+  .items-title { font-size: 14px; font-weight: 700; color: #2E7D32; letter-spacing: 1px; }
+  .items-count { font-size: 12px; color: #888; font-weight: 500; }
 
   .item-card {
     background: #fafff5; border: 1px solid #e0eed4;
@@ -120,7 +121,7 @@
     flex: 1; min-width: 0;
     border: none; border-bottom: 1.5px dashed #c5d6b8;
     background: transparent;
-    font-family: inherit; font-size: 15px; color: #333;
+    font-family: inherit; font-size: 17px; color: #333;
     padding: 4px 0; outline: none;
     -webkit-appearance: none; appearance: none; border-radius: 0;
   }
@@ -144,7 +145,7 @@
   }
   .num-field { min-width: 0; }
   .num-field label, .subtotal-field label {
-    display: block; font-size: 10px; color: #888;
+    display: block; font-size: 12px; color: #888;
     font-weight: 700; margin-bottom: 3px;
     letter-spacing: 1px; text-align: center;
   }
@@ -152,7 +153,7 @@
     width: 100%;
     border: none; border-bottom: 1.5px dashed #c5d6b8;
     background: transparent;
-    font-family: inherit; font-size: 16px;
+    font-family: inherit; font-size: 18px;
     color: #1B5E20; font-weight: 600;
     padding: 4px 0; outline: none; text-align: center;
     -webkit-appearance: none; appearance: none;
@@ -166,7 +167,7 @@
   .num-input::placeholder { color: #ccc; font-weight: 400; }
   .subtotal-field { text-align: center; }
   .subtotal-value {
-    font-size: 16px; font-weight: 700; color: #1B5E20;
+    font-size: 18px; font-weight: 700; color: #1B5E20;
     padding: 4px 0;
   }
 
@@ -176,7 +177,7 @@
     border: 1.5px dashed #2E7D32;
     border-radius: 10px;
     color: #2E7D32;
-    font-family: inherit; font-size: 15px; font-weight: 700;
+    font-family: inherit; font-size: 16px; font-weight: 700;
     letter-spacing: 1px; cursor: pointer;
     margin: 4px 0 12px;
     -webkit-appearance: none; appearance: none;
@@ -196,31 +197,50 @@
     border-top: 2px solid #2E7D32;
     margin-top: 8px; padding-top: 12px;
   }
-  .total-label { font-size: 14px; font-weight: 500; color: #555; }
+  .total-label { font-size: 16px; font-weight: 500; color: #555; }
   .total-row.grand .total-label {
-    font-size: 16px; font-weight: 900; color: #1B5E20; letter-spacing: 2px;
+    font-size: 18px; font-weight: 900; color: #1B5E20; letter-spacing: 1px;
   }
   .total-value {
-    font-size: 16px; font-weight: 700; color: #333;
+    font-size: 18px; font-weight: 700; color: #333;
     min-width: 100px; text-align: right;
   }
   .total-row.grand .total-value {
-    font-size: 22px; font-weight: 900; color: #1B5E20;
+    font-size: 26px; font-weight: 900; color: #1B5E20;
   }
+  .tax-switch {
+    display: inline-flex; align-items: center; gap: 8px;
+    cursor: pointer; user-select: none; -webkit-user-select: none;
+  }
+  .tax-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .tax-knob {
+    width: 46px; height: 27px; border-radius: 14px;
+    background: #c9c9c9; position: relative;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .tax-knob::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 21px; height: 21px; border-radius: 50%;
+    background: #fff; transition: left 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  .tax-switch input:checked + .tax-knob { background: #2E7D32; }
+  .tax-switch input:checked + .tax-knob::after { left: 22px; }
+  #tax.tax-off-value { color: #aaa; font-weight: 500; }
 
   .notes-section {
     padding: 16px 20px;
     border-top: 1px solid #e8f0e0;
   }
   .notes-title {
-    font-size: 12px; font-weight: 700; color: #388E3C;
+    font-size: 13px; font-weight: 700; color: #388E3C;
     margin-bottom: 8px; letter-spacing: 1px;
   }
   .notes-area {
     width: 100%;
     border: 1.5px dashed #c5d6b8;
     border-radius: 8px; padding: 10px;
-    font-family: inherit; font-size: 14px; color: #333;
+    font-family: inherit; font-size: 16px; color: #333;
     background: #fffff8; resize: vertical;
     min-height: 60px; outline: none;
     -webkit-appearance: none; appearance: none;
@@ -232,7 +252,7 @@
     text-align: center; padding: 14px 20px;
     background: #f5f9f0;
     border-top: 1px solid #e8f0e0;
-    font-size: 11px; color: #888;
+    font-size: 12px; color: #888;
     letter-spacing: 0.5px;
   }
 
@@ -242,9 +262,9 @@
     justify-content: center; flex-wrap: wrap;
   }
   .btn {
-    padding: 13px 20px;
+    padding: 14px 20px;
     border: none; border-radius: 10px;
-    font-family: inherit; font-size: 14px; font-weight: 700;
+    font-family: inherit; font-size: 16px; font-weight: 700;
     cursor: pointer; letter-spacing: 1px;
     -webkit-appearance: none; appearance: none;
   }
@@ -273,6 +293,8 @@
   .screenshot-mode #saveIndicator { display: none !important; }
   .screenshot-mode .item-card-empty { display: none !important; }
   .screenshot-mode .notes-area { resize: none !important; padding: 4px 0 !important; }
+  .screenshot-mode .tax-knob { display: none !important; }
+  .screenshot-mode.tax-off #taxRow { display: none !important; }
 
   .pdf-render-host {
     position: fixed;
@@ -305,27 +327,27 @@
   }
   .pdf-brand {
     font-family: "Noto Serif TC", "Noto Serif CJK TC", "PMingLiU", serif;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 700;
     color: #315F38;
     line-height: 1;
   }
   .pdf-services {
     margin-top: 6px;
-    font-size: 12px;
+    font-size: 13px;
     color: #5F6A5D;
     line-height: 1.35;
   }
   .pdf-doc-type {
     text-align: right;
     color: #315F38;
-    font-size: 25px;
+    font-size: 26px;
     font-weight: 700;
     line-height: 1;
   }
   .pdf-doc-meta {
     margin-top: 7px;
-    font-size: 12px;
+    font-size: 13px;
     color: #5F6A5D;
     line-height: 1.35;
     text-align: right;
@@ -339,8 +361,8 @@
   }
   .pdf-info-cell {
     display: grid;
-    grid-template-columns: 68px 1fr;
-    min-height: 32px;
+    grid-template-columns: 74px 1fr;
+    min-height: 35px;
     border-right: 1px solid #D7DED2;
     border-bottom: 1px solid #D7DED2;
     align-items: center;
@@ -349,13 +371,13 @@
   .pdf-info-cell:nth-last-child(-n+3) { border-bottom: 0; }
   .pdf-info-label {
     color: #5F6A5D;
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 700;
     padding: 0 8px;
   }
   .pdf-info-value {
     color: #20241F;
-    font-size: 14px;
+    font-size: 15.5px;
     font-weight: 500;
     padding: 0 8px;
     word-break: break-word;
@@ -363,7 +385,7 @@
   .pdf-section-title {
     margin-top: 12px;
     color: #315F38;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
     line-height: 1;
   }
@@ -371,23 +393,23 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 6px;
-    font-size: 14px;
+    font-size: 16.5px;
     table-layout: fixed;
   }
   .pdf-table th {
     background: #F0F4EC;
     color: #4D594A;
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 700;
-    padding: 5px 6px;
+    padding: 6px 6px;
     border: 1px solid #D7DED2;
   }
   .pdf-table td {
     color: #20241F;
-    padding: 5.5px 6px;
+    padding: 7px 7px;
     border: 1px solid #D7DED2;
     vertical-align: top;
-    line-height: 1.3;
+    line-height: 1.35;
     word-break: break-word;
   }
   .pdf-table .pdf-col-index { width: 40px; text-align: center; }
@@ -396,7 +418,7 @@
   .pdf-table .pdf-col-price,
   .pdf-table .pdf-col-subtotal { width: 86px; text-align: right; }
   .pdf-table tr.pdf-empty-row td {
-    height: 26px;
+    height: 30px;
     color: transparent;
   }
   .pdf-summary-wrap {
@@ -414,13 +436,13 @@
   }
   .pdf-note-title {
     color: #5F6A5D;
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 700;
     margin-bottom: 4px;
   }
   .pdf-note-body {
     color: #4D594A;
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.42;
     white-space: pre-wrap;
   }
@@ -432,17 +454,17 @@
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    min-height: 33px;
+    min-height: 38px;
     padding: 0 10px;
     border-bottom: 1px solid #D7DED2;
-    font-size: 14px;
+    font-size: 16.5px;
     color: #4D594A;
   }
   .pdf-total-row:last-child { border-bottom: 0; }
   .pdf-total-row.grand {
-    min-height: 40px;
+    min-height: 46px;
     color: #315F38;
-    font-size: 19px;
+    font-size: 23px;
     font-weight: 800;
     background: #EFF5EB;
   }
@@ -454,7 +476,7 @@
     background: #FBFCF8;
   }
   .pdf-term {
-    min-height: 70px;
+    min-height: 74px;
     padding: 8px 10px;
     border-right: 1px solid #D7DED2;
   }
@@ -463,13 +485,13 @@
   }
   .pdf-term-title {
     color: #315F38;
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 700;
     margin-bottom: 5px;
   }
   .pdf-term-body {
     color: #4D594A;
-    font-size: 12.5px;
+    font-size: 14px;
     line-height: 1.45;
   }
   .pdf-approval {
@@ -478,7 +500,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 18px;
     color: #5F6A5D;
-    font-size: 12.5px;
+    font-size: 14px;
   }
   .pdf-approval-cell {
     display: grid;
@@ -497,13 +519,13 @@
     justify-content: space-between;
     border-top: 1px solid #D7DED2;
     color: #6F786C;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.25;
   }
   .pdf-continuation {
     margin-top: 7px;
     color: #7D877A;
-    font-size: 12px;
+    font-size: 13px;
     text-align: right;
   }
 
@@ -520,7 +542,7 @@
   }
   .overlay.show { display: flex; }
   .overlay-tip {
-    color: #fff; font-size: 13px; text-align: center;
+    color: #fff; font-size: 14px; text-align: center;
     margin: 0 auto 12px; line-height: 1.7;
     background: rgba(255,255,255,0.12);
     padding: 10px 16px; border-radius: 10px;
@@ -541,9 +563,9 @@
     margin-bottom: 12px;
   }
   .overlay-btn {
-    padding: 13px 22px;
+    padding: 14px 22px;
     border: none; border-radius: 10px;
-    font-family: inherit; font-size: 14px; font-weight: 700;
+    font-family: inherit; font-size: 15px; font-weight: 700;
     cursor: pointer; letter-spacing: 1px;
     -webkit-appearance: none; appearance: none;
   }
@@ -673,12 +695,12 @@
       <span class="total-label">小計</span>
       <span class="total-value" id="subtotal">$0</span>
     </div>
-    <div class="total-row">
-      <span class="total-label">稅金 5%</span>
-      <span class="total-value" id="tax">$0</span>
+    <div class="total-row" id="taxRow">
+      <label class="total-label tax-switch"><input type="checkbox" id="taxSwitch" onchange="onTaxToggle()"><span class="tax-knob" aria-hidden="true"></span>加營業稅 5%</label>
+      <span class="total-value tax-off-value" id="tax">未計</span>
     </div>
     <div class="total-row grand">
-      <span class="total-label">合　計</span>
+      <span class="total-label" id="grandLabel">合計（未稅）</span>
       <span class="total-value" id="grand">$0</span>
     </div>
   </div>
@@ -693,7 +715,7 @@
 
   <div class="actions">
     <button type="button" class="btn btn-clear" onclick="clearAll()">清空重填</button>
-    <button type="button" class="btn btn-img" id="genBtn" onclick="genPDF()">產生 PDF</button>
+    <button type="button" class="btn btn-img" id="genBtn" onclick="genPDF()">產生報價單</button>
   </div>
 </div>
 
@@ -701,8 +723,9 @@
   <div class="overlay-tip" id="overlayTip"></div>
   <div class="overlay-img-wrap"><img id="previewImg" alt="報價單預覽"></div>
   <div class="overlay-btns">
-    <button type="button" class="overlay-btn overlay-save" onclick="downloadPDF()">下載 PDF</button>
-    <button type="button" class="overlay-btn overlay-save" onclick="sharePDF()" style="background:#1976D2;">分享 PDF</button>
+    <button type="button" class="overlay-btn overlay-save" onclick="shareImage()">傳送圖片</button>
+    <button type="button" class="overlay-btn overlay-save" onclick="sharePDF()" style="background:#1976D2;">傳送 PDF</button>
+    <button type="button" class="overlay-btn overlay-save" onclick="downloadPDF()" style="background:rgba(255,255,255,0.28);">下載 PDF</button>
     <button type="button" class="overlay-btn overlay-close" onclick="closeOverlay()">✕ 關閉</button>
   </div>
 </div>
@@ -783,6 +806,11 @@ function refreshNumbers() {
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
 
+function taxEnabled() {
+  var sw = document.getElementById('taxSwitch');
+  return !!(sw && sw.checked);
+}
+
 function calc() {
   var sum = 0;
   var cards = itemsEl.querySelectorAll('.item-card');
@@ -797,9 +825,25 @@ function calc() {
     if (!d && q === 0 && p === 0) c.classList.add('item-card-empty');
     else c.classList.remove('item-card-empty');
   }
+  var on = taxEnabled();
+  var taxEl = document.getElementById('tax');
   document.getElementById('subtotal').textContent = fmt(sum);
-  document.getElementById('tax').textContent = fmt(sum * 0.05);
-  document.getElementById('grand').textContent = fmt(sum * 1.05);
+  if (on) {
+    taxEl.textContent = fmt(sum * 0.05);
+    taxEl.classList.remove('tax-off-value');
+  } else {
+    taxEl.textContent = '未計';
+    taxEl.classList.add('tax-off-value');
+  }
+  document.getElementById('grand').textContent = fmt(on ? sum * 1.05 : sum);
+  document.getElementById('grandLabel').textContent = on ? '合計（含稅）' : '合計（未稅）';
+  document.getElementById('page').classList.toggle('tax-off', !on);
+}
+
+function onTaxToggle() {
+  calc();
+  markPDFStale();
+  scheduleAutoSave();
 }
 
 function clearAll() {
@@ -808,6 +852,8 @@ function clearAll() {
   for (var i = 0; i < inputs.length; i++) inputs[i].value = '';
   itemsEl.innerHTML = '';
   document.querySelector('.notes-area').value = '';
+  var sw = document.getElementById('taxSwitch');
+  if (sw) sw.checked = false;
   markPDFStale();
   clearDraft();
   addItem();
@@ -820,6 +866,7 @@ function prepareForScreenshot(root) {
   var inputs = root.querySelectorAll('input');
   for (var i = 0; i < inputs.length; i++) {
     var inp = inputs[i];
+    if (inp.type === 'checkbox' || inp.type === 'radio') continue;
     var cs = window.getComputedStyle(inp);
     var span = document.createElement('span');
     span.textContent = inp.value || '';
@@ -908,10 +955,15 @@ function getPrintableItems(data) {
   return items;
 }
 
-function computePdfTotals(items) {
+function computePdfTotals(items, taxOn) {
   var subtotal = 0;
   for (var i = 0; i < items.length; i++) subtotal += items[i].subtotal;
-  return { subtotal: subtotal, tax: subtotal * 0.05, grand: subtotal * 1.05 };
+  return {
+    subtotal: subtotal,
+    tax: taxOn ? subtotal * 0.05 : 0,
+    grand: taxOn ? subtotal * 1.05 : subtotal,
+    taxOn: !!taxOn
+  };
 }
 
 function buildPdfSheet(data, rows, pageNo, totalPages, isLast, totals, rowOffset, rowsPerPage) {
@@ -993,11 +1045,15 @@ function buildPdfSheet(data, rows, pageNo, totalPages, isLast, totals, rowOffset
     noteBox.appendChild(createPdfEl('div', 'pdf-note-title', '備註'));
     noteBox.appendChild(createPdfEl('div', 'pdf-note-body', pdfText(data.notes, '')));
     var totalBox = createPdfEl('div', 'pdf-total-box');
-    var rowsData = [
-      ['小計', fmt(totals.subtotal), ''],
-      ['稅金 5%', fmt(totals.tax), ''],
-      ['合計', fmt(totals.grand), 'grand']
-    ];
+    var rowsData = totals.taxOn
+      ? [
+          ['小計', fmt(totals.subtotal), ''],
+          ['營業稅 5%', fmt(totals.tax), ''],
+          ['合計（含稅）', fmt(totals.grand), 'grand']
+        ]
+      : [
+          ['合計（未稅）', fmt(totals.grand), 'grand']
+        ];
     for (var t = 0; t < rowsData.length; t++) {
       var totalRow = createPdfEl('div', 'pdf-total-row ' + rowsData[t][2]);
       totalRow.appendChild(createPdfEl('span', '', rowsData[t][0]));
@@ -1045,8 +1101,8 @@ function buildPdfSheet(data, rows, pageNo, totalPages, isLast, totals, rowOffset
 function buildPrintableQuote(data) {
   var host = createPdfEl('div', 'pdf-render-host');
   var items = getPrintableItems(data);
-  var totals = computePdfTotals(items);
-  var rowsPerPage = 12;
+  var totals = computePdfTotals(items, !!data.taxOn);
+  var rowsPerPage = 9;
   var totalPages = Math.max(1, Math.ceil(items.length / rowsPerPage));
   for (var p = 0; p < totalPages; p++) {
     var start = p * rowsPerPage;
@@ -1083,7 +1139,7 @@ function genPDF() {
     if (sheetsForCheck[sc].scrollHeight > sheetsForCheck[sc].clientHeight + 1) {
       removePrintableQuote(printableHost);
       btn.classList.remove('generating');
-      btn.textContent = '產生 PDF';
+      btn.textContent = '產生報價單';
       alert('第 ' + (sc + 1) + ' 頁內容過長，PDF 會被裁切。\n請縮短過長的工程內容或備註文字。');
       return;
     }
@@ -1093,7 +1149,6 @@ function genPDF() {
     var jsPDF = window.jspdf.jsPDF;
     var pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
     var sheets = printableHost.querySelectorAll('.pdf-sheet');
-    var firstPreview = null;
     var job = Promise.resolve();
 
     for (var i = 0; i < sheets.length; i++) {
@@ -1110,7 +1165,6 @@ function genPDF() {
             if (pageIndex > 0) pdf.addPage();
             var imgData = canvas.toDataURL('image/jpeg', 0.94);
             pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-            if (pageIndex === 0) firstPreview = canvas.toDataURL('image/png');
           });
         });
       })(sheets[i], i);
@@ -1119,32 +1173,68 @@ function genPDF() {
     job.then(function() {
       removePrintableQuote(printableHost);
       pdfBlob = pdf.output('blob');
-      pdfDataURL = firstPreview || '';
+      // 接著把編輯畫面翻拍成手機長圖(LINE 上直接看,不用縮放)
+      var page = document.getElementById('page');
+      page.classList.add('screenshot-mode');
+      var subs = prepareForScreenshot(page);
+      return html2canvas(page, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#f0f4e8',
+        logging: false
+      }).then(function(canvas) {
+        restoreFromScreenshot(subs);
+        page.classList.remove('screenshot-mode');
+        imgDataURL = canvas.toDataURL('image/png');
+        return new Promise(function(resolve) {
+          if (canvas.toBlob) {
+            canvas.toBlob(function(b) { imgBlob = b; resolve(); }, 'image/png');
+          } else {
+            try {
+              var bin = atob(imgDataURL.split(',')[1]);
+              var arr = new Uint8Array(bin.length);
+              for (var k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k);
+              imgBlob = new Blob([arr], { type: 'image/png' });
+            } catch (e) { imgBlob = null; }
+            resolve();
+          }
+        });
+      }).catch(function(err) {
+        restoreFromScreenshot(subs);
+        page.classList.remove('screenshot-mode');
+        throw err;
+      });
+    }).then(function() {
       lastPDFSignature = pdfSignature;
-      document.getElementById('previewImg').src = pdfDataURL;
+      document.getElementById('previewImg').src = imgDataURL;
       var tip = document.getElementById('overlayTip');
       if (isIOS()) {
-        tip.innerHTML = '<strong>iPhone:</strong><br>' +
-          '「下載 PDF」會叫出分享面板,請選「<b>儲存到檔案</b>」<br>' +
-          '「分享 PDF」可直接傳到 LINE / 訊息 / Email';
+        tip.innerHTML = '<strong>怎麼傳給客戶:</strong><br>' +
+          '「<b>傳送圖片</b>」貼進 LINE,手機直接看最清楚<br>' +
+          '「傳送 PDF」正式檔案,適合列印存檔<br>' +
+          '「下載 PDF」選「儲存到檔案」存進手機';
       } else {
-        tip.innerHTML = '<strong>Android:</strong><br>「下載 PDF」直接下載到手機<br>「分享 PDF」可傳到 LINE / Email';
+        tip.innerHTML = '<strong>怎麼傳給客戶:</strong><br>' +
+          '「<b>傳送圖片</b>」貼進 LINE,手機直接看最清楚<br>' +
+          '「傳送 PDF」正式檔案,適合列印存檔<br>' +
+          '「下載 PDF」直接下載到手機';
       }
       document.getElementById('overlay').classList.add('show');
       window.scrollTo(0, 0);
       btn.classList.remove('generating');
-      btn.textContent = '產生 PDF';
+      btn.textContent = '產生報價單';
     }).catch(function(err) {
       removePrintableQuote(printableHost);
       btn.classList.remove('generating');
-      btn.textContent = '產生 PDF';
-      alert('產生 PDF 失敗\n' + (err && err.message ? err.message : err));
+      btn.textContent = '產生報價單';
+      alert('產生報價單失敗\n' + (err && err.message ? err.message : err));
     });
   }, 80);
 }
 
 var pdfBlob = null;
-var pdfDataURL = null;
+var imgBlob = null;
+var imgDataURL = null;
 var lastPDFSignature = null;
 
 function getFormSignature() {
@@ -1153,7 +1243,8 @@ function getFormSignature() {
 
 function markPDFStale() {
   pdfBlob = null;
-  pdfDataURL = null;
+  imgBlob = null;
+  imgDataURL = null;
   lastPDFSignature = null;
   var preview = document.getElementById('previewImg');
   if (preview) preview.removeAttribute('src');
@@ -1168,7 +1259,7 @@ function isPDFFresh() {
 function requireFreshPDF(actionText) {
   if (isPDFFresh()) return true;
   markPDFStale();
-  alert('資料已變更,請先按「產生 PDF」重新產生後再' + actionText + '。');
+  alert('資料已變更,請先按「產生報價單」重新產生後再' + actionText + '。');
   return false;
 }
 
@@ -1257,12 +1348,53 @@ function sharePDF() {
   downloadPDF();
 }
 
+function getImageFilename() {
+  return getPDFFilename().replace(/\.pdf$/, '.png');
+}
+
+// 傳送手機長圖:LINE 聊天室直接顯示,字大清楚不用縮放
+function shareImage() {
+  if (!requireFreshPDF('傳送圖片')) return;
+  if (!imgBlob) {
+    alert('圖片產生失敗,請改用「傳送 PDF」');
+    return;
+  }
+  var filename = getImageFilename();
+  if (navigator.canShare) {
+    try {
+      var file = new File([imgBlob], filename, { type: 'image/png' });
+      if (navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: filename })
+          .catch(function(err) {
+            if (err && err.name !== 'AbortError') {
+              alert('傳送失敗:' + err.message);
+            }
+          });
+        return;
+      }
+    } catch (e) {}
+  }
+  // 沒有分享功能(桌機瀏覽器) → 直接下載圖片
+  try {
+    var url = URL.createObjectURL(imgBlob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  } catch (e) {
+    alert('下載失敗:' + e.message);
+  }
+}
+
 // ===== 自動暫存 =====
 var STORAGE_KEY = 'tomei_quote_draft_v1';
 var saveTimer = null;
 
 function collectFormData() {
-  var data = { info: {}, items: [], notes: '' };
+  var data = { info: {}, items: [], notes: '', taxOn: taxEnabled() };
   var infoInputs = document.querySelectorAll('.info-input');
   for (var i = 0; i < infoInputs.length; i++) {
     var key = infoInputs[i].getAttribute('data-field') || ('info_' + i);
@@ -1333,6 +1465,9 @@ function applyDraft(draft) {
   // 還原 notes
   var notesEl = document.querySelector('.notes-area');
   if (notesEl && data.notes !== undefined) notesEl.value = data.notes;
+  // 還原營業稅選項(舊草稿沒有此欄位 → 預設未稅)
+  var sw = document.getElementById('taxSwitch');
+  if (sw) sw.checked = !!data.taxOn;
   calc();
 }
 
