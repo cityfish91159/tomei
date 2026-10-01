@@ -4,11 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
 <title>東美園藝 報價單</title>
-<script>
-var cloudAppUrl = 'https://script.google.com/macros/s/AKfycbzv9SiQ3_Sif7vfW7QpeucGv7bNTNAKfnci04la-v6imeDkn8jJe5-tllkcKYtaJ5dL/exec';
-if (location.hostname === 'cityfish91159.github.io') location.replace(cloudAppUrl);
-</script>
 
 <!-- iOS「加入主畫面」變 App 的設定 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -609,7 +606,6 @@ if (location.hostname === 'cityfish91159.github.io') location.replace(cloudAppUr
   .history-card .history-amount { color: #1B5E20; font-size: 21px; font-weight: 800; }
   .history-card .btn { margin-top: 12px; min-height: 44px; padding: 10px 14px; font-size: 14px; letter-spacing: 0; }
   .history-more { width: 100%; min-height: 44px; margin: 10px 0; }
-  .cloud-link { display: inline-block; color: #245c29; font-size: 14px; margin-top: 12px; padding: 10px 0; }
   .tax-switch input:focus-visible + .tax-knob { outline: 3px solid #236629; outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 
@@ -780,7 +776,6 @@ if (location.hostname === 'cityfish91159.github.io') location.replace(cloudAppUr
   <p id="historyMessage" class="cloud-message" role="status"></p>
   <div id="historyList"></div>
   <button type="button" id="historyMore" class="btn btn-history history-more" onclick="searchCloudHistory(true)" hidden>載入更多紀錄</button>
-  <a id="spreadsheetLink" class="cloud-link" target="_blank" rel="noopener" hidden>開啟 Google 雲端工單表</a>
 </dialog>
 
 <div class="overlay" id="overlay">
@@ -1462,6 +1457,7 @@ var historyCursor = 0;
 var historyQuery = '';
 var historyRequest = 0;
 var cloudSaving = false;
+var cloudApiUrl = 'https://script.google.com/macros/s/AKfycbzv9SiQ3_Sif7vfW7QpeucGv7bNTNAKfnci04la-v6imeDkn8jJe5-tllkcKYtaJ5dL/exec';
 
 function collectFormData() {
   var data = { info: {}, items: [], notes: '', taxOn: taxEnabled() };
@@ -1539,20 +1535,32 @@ function cloudNotice(message, error) {
   el.classList.toggle('error', !!error);
 }
 
-function callCloud(name, args) {
-  return new Promise(function(resolve, reject) {
-    if (!(window.google && google.script && google.script.run)) {
-      reject(new Error('請從 Google 雲端工單頁面操作儲存與查詢。'));
-      return;
-    }
-    var timer = setTimeout(function() { reject(new Error('連線時間較久，請重試；重複按儲存不會新增同一筆紀錄。')); }, 45000);
-    var runner = google.script.run.withSuccessHandler(function(result) {
-      clearTimeout(timer); resolve(result);
-    }).withFailureHandler(function(error) {
-      clearTimeout(timer); reject(new Error(error.message || '雲端連線失敗，請稍後再試。'));
+async function callCloud(name, args) {
+  var controller = new AbortController();
+  var timer = setTimeout(function() { controller.abort(); }, 45000);
+  try {
+    var response = await fetch(cloudApiUrl, {
+      method: 'POST',
+      credentials: 'omit',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      body: JSON.stringify({ action: name, args: args }),
+      signal: controller.signal
     });
-    runner[name].apply(runner, args);
-  });
+    if (!response.ok) throw new Error('雲端連線失敗，請稍後重試。');
+    var payload;
+    try { payload = await response.json(); }
+    catch (error) { throw new Error('雲端服務尚未完成設定，請聯絡網站管理者。'); }
+    if (!payload || typeof payload.ok !== 'boolean') throw new Error('雲端回應格式不正確，請稍後再試。');
+    if (!payload.ok) throw new Error(payload.error || '雲端作業失敗，請稍後再試。');
+    return payload.result;
+  } catch (error) {
+    if (error.name === 'AbortError') throw new Error('連線時間較久，請重試；同一筆儲存要求不會重複新增紀錄。');
+    if (error.name === 'TypeError') throw new Error('目前無法連線到雲端，請檢查網路後重試。');
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function saveCloudQuote() {
@@ -1575,7 +1583,7 @@ async function saveCloudQuote() {
   cloudSaving = true;
   button.disabled = true;
   button.textContent = '儲存中…';
-  cloudNotice('正在儲存到 Google 雲端…');
+  cloudNotice('正在儲存工單…');
   try {
     var record = await callCloud('saveQuote', [{ id: cloudPendingSave.id, data: data }]);
     if (getFormSignature() === signature) {
@@ -1641,7 +1649,7 @@ async function searchCloudHistory(more) {
   var request = ++historyRequest;
   moreButton.hidden = true;
   message.classList.remove('error');
-  message.textContent = '正在查詢 Google 雲端紀錄…';
+  message.textContent = '正在查詢歷史紀錄…';
   try {
     var result = await callCloud('searchQuotes', [historyQuery, historyCursor]);
     if (request !== historyRequest) return;
@@ -1649,11 +1657,6 @@ async function searchCloudHistory(more) {
     historyCursor = result.nextCursor;
     moreButton.hidden = !historyCursor;
     message.textContent = list.children.length ? '已顯示 ' + list.children.length + ' 筆紀錄，最新儲存的排在前面。' : (historyQuery ? '找不到符合的紀錄，清除搜尋文字可查看全部工單。' : '還沒有歷史紀錄。填寫報價單後，按「儲存紀錄」建立第一筆。');
-    var link = document.getElementById('spreadsheetLink');
-    if (/^https:\/\/docs\.google\.com\/spreadsheets\/d\//.test(result.spreadsheetUrl)) {
-      link.href = result.spreadsheetUrl;
-      link.hidden = false;
-    }
   } catch (error) {
     if (request !== historyRequest) return;
     message.textContent = error.message;

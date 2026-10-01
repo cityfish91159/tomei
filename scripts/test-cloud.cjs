@@ -43,6 +43,10 @@ const spreadsheet = {
   getUrl: () => 'https://docs.google.com/spreadsheets/d/test'
 };
 const server = vm.createContext({
+  ContentService: {
+    MimeType: { JSON: 'application/json' },
+    createTextOutput: text => ({ setMimeType: () => ({ getContent: () => text }) })
+  },
   LockService: { getScriptLock: () => ({ tryLock: () => { locks++; return !locked; }, releaseLock: () => { releases++; } }) },
   PropertiesService: { getScriptProperties: () => ({ getProperty: key => properties.get(key), setProperty: (key, value) => properties.set(key, value) }) },
   SpreadsheetApp: { create: () => { created++; return spreadsheet; }, openById: () => spreadsheet, flush() {} },
@@ -105,6 +109,16 @@ assert.equal(server.searchQuotes('完全不存在', 0).records.length, 0);
 assert.equal(server.searchQuotes(first.data.info.quoteNo, 0).records[0].id, first.id);
 assert.throws(() => server.searchQuotes('', -1), /頁碼/);
 
+const post = body => JSON.parse(server.doPost({ postData: { contents: body } }).getContent());
+const queryResponse = post(JSON.stringify({ action: 'searchQuotes', args: ['0988000000', 0] }));
+assert.equal(queryResponse.ok, true);
+assert.equal(queryResponse.result.records.length, 1, '免登入 API 可查詢雲端工單');
+assert.ok(!('spreadsheetUrl' in queryResponse.result), '人員介面不導向私人 Google 試算表');
+assert.equal(post(JSON.stringify({ action: 'saveQuote', args: [request] })).result.id, first.id);
+for (const body of ['{', 'null', '{}', JSON.stringify({ action: 'withStore_', args: [] }), JSON.stringify({ action: 'saveQuote', args: [] })]) {
+  assert.equal(post(body).ok, false, '錯誤請求與未開放操作必須拒絕');
+}
+
 const beforeFailure = rows.length;
 failWrite = true;
 assert.throws(() => server.saveQuote({ id: randomUUID(), data: quote() }), /寫入失敗/);
@@ -121,14 +135,15 @@ const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(match => match[1]);
 for (const code of scripts) new vm.Script(code);
 assert.ok(!/localStorage\s*\./.test(html), '工單資料不使用本機儲存');
+assert.ok(!/location\.replace\(/.test(html), '公開入口不轉接 Google 登入');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'apps-script/appsscript.json'), 'utf8'));
-assert.equal(manifest.webapp.access, 'MYSELF', '工單限定擁有者存取');
-assert.equal(manifest.webapp.executeAs, 'USER_DEPLOYING');
+assert.equal(manifest.webapp.access, 'ANYONE_ANONYMOUS', '已同意持有連結即可使用，不要求 Google 登入');
+assert.equal(manifest.webapp.executeAs, 'USER_DEPLOYING', 'Google 僅由後台管理者授權');
 
 async function checkClient() {
   const elements = new Map();
   const client = vm.createContext({
-    crypto: { randomUUID }, setTimeout, clearTimeout,
+    crypto: { randomUUID }, setTimeout, clearTimeout, AbortController,
     document: {
       readyState: 'loading', addEventListener() {},
       getElementById(id) {
@@ -138,6 +153,21 @@ async function checkClient() {
     }
   });
   vm.runInContext(scripts.find(code => code.includes('function saveCloudQuote()')), client);
+  let sent;
+  client.fetch = async (url, options) => {
+    sent = { url, options };
+    return { ok: true, json: async () => ({ ok: true, result: { records: [] } }) };
+  };
+  assert.equal((await client.callCloud('searchQuotes', ['', 0])).records.length, 0);
+  assert.equal(sent.options.credentials, 'omit', '雲端請求不依賴 Google 登入 Cookie');
+  assert.equal(sent.options.headers['Content-Type'], 'text/plain;charset=UTF-8', '使用不觸發預檢的請求格式');
+  assert.deepEqual(JSON.parse(sent.options.body), { action: 'searchQuotes', args: ['', 0] });
+  client.fetch = async () => ({ ok: true, json: async () => ({ ok: false, error: '請填寫客戶名稱' }) });
+  await assert.rejects(client.callCloud('saveQuote', [{}]), /請填寫客戶名稱/);
+  client.fetch = async () => ({ ok: true, json: async () => { throw new SyntaxError(); } });
+  await assert.rejects(client.callCloud('searchQuotes', ['', 0]), /尚未完成設定/);
+  client.fetch = async () => { const error = new Error(); error.name = 'AbortError'; throw error; };
+  await assert.rejects(client.callCloud('searchQuotes', ['', 0]), /連線時間較久/);
   let form = quote();
   let message = '';
   let calls = 0;
@@ -174,5 +204,5 @@ async function checkClient() {
 }
 
 checkClient().then(() => {
-  console.log('通過：資料驗證、金額、文字安全、重試去重、客戶查詢、分頁、錯誤保護、前端儲存競態、程式語法與私人存取設定。');
+  console.log('通過：資料驗證、金額、文字安全、重試去重、客戶查詢、分頁、錯誤保護、免登入 API、前端連線與儲存競態。');
 }).catch(error => { console.error(error); process.exitCode = 1; });

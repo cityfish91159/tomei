@@ -6,6 +6,32 @@ function doGet() {
     .addMetaTag('viewport', 'width=device-width, initial-scale=1.0, viewport-fit=cover');
 }
 
+function doPost(event) {
+  try {
+    const body = event && event.postData && event.postData.contents;
+    if (typeof body !== 'string' || body.length > 100000) throw new Error('工單請求格式不正確或內容過長。');
+    let request;
+    try { request = JSON.parse(body); }
+    catch (error) { throw new Error('工單請求格式不正確，請重新操作。'); }
+    if (!request || !Array.isArray(request.args)) throw new Error('工單請求格式不正確，請重新操作。');
+    let result;
+    if (request.action === 'saveQuote' && request.args.length === 1) {
+      result = saveQuote(request.args[0]);
+    } else if (request.action === 'searchQuotes' && request.args.length === 2) {
+      result = searchQuotes(request.args[0], request.args[1]);
+    } else {
+      throw new Error('不支援這項工單操作。');
+    }
+    return jsonResponse_({ ok: true, result: result });
+  } catch (error) {
+    return jsonResponse_({ ok: false, error: error.message || '雲端作業失敗，請稍後再試。' });
+  }
+}
+
+function jsonResponse_(value) {
+  return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+}
+
 function validateQuote_(input) {
   if (!input || typeof input !== 'object' || !input.info || !Array.isArray(input.items) || typeof input.taxOn !== 'boolean') {
     throw new Error('工單資料不完整，請重新整理後再試。');
@@ -138,7 +164,7 @@ function searchQuotes(search, beforeRow) {
   if (typeof search !== 'string' || search.length > 200) throw new Error('搜尋內容最多 200 個字。');
   if (!Number.isInteger(beforeRow) || beforeRow < 0) throw new Error('查詢頁碼不正確，請重新搜尋。');
   const query = search.normalize('NFKC').replace(/\s+/g, '').toLocaleLowerCase();
-  return withStore_(function(sheet, rows, spreadsheet) {
+  return withStore_(function(sheet, rows) {
     const results = [];
     let nextCursor = 0;
     const start = beforeRow ? Math.min(rows.length - 1, beforeRow - 3) : rows.length - 1;
@@ -148,10 +174,10 @@ function searchQuotes(search, beforeRow) {
       const searchable = [info.clientName, info.phone, info.address, info.quoteNo]
         .join(' ').normalize('NFKC').replace(/\s+/g, '').toLocaleLowerCase();
       if (query && !searchable.includes(query)) continue;
-      if (results.length === 25) return { records: results, nextCursor: nextCursor, spreadsheetUrl: spreadsheet.getUrl() };
+      if (results.length === 25) return { records: results, nextCursor: nextCursor };
       results.push(record);
       nextCursor = index + 2;
     }
-    return { records: results, nextCursor: 0, spreadsheetUrl: spreadsheet.getUrl() };
+    return { records: results, nextCursor: 0 };
   });
 }
