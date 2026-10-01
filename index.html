@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>東美園藝 報價單</title>
+<script>
+var cloudAppUrl = 'https://script.google.com/macros/s/AKfycbzv9SiQ3_Sif7vfW7QpeucGv7bNTNAKfnci04la-v6imeDkn8jJe5-tllkcKYtaJ5dL/exec';
+if (location.hostname === 'cityfish91159.github.io') location.replace(cloudAppUrl);
+</script>
 
 <!-- iOS「加入主畫面」變 App 的設定 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -575,6 +579,40 @@
 
   .generating { opacity: 0.6; pointer-events: none; }
 
+  [hidden] { display: none !important; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible {
+    outline: 3px solid #236629; outline-offset: 3px;
+  }
+  .cloud-tools { padding: 14px 20px; border-bottom: 1px solid #dce7d4; background: #f5f9f0; }
+  .cloud-actions { display: flex; gap: 10px; }
+  .cloud-actions .btn { flex: 1; padding: 12px 8px; letter-spacing: 0; font-size: 15px; }
+  .btn-cloud { background: #1B5E20; color: #fff; }
+  .btn-cloud:hover { background: #174b1b; }
+  .btn-history { background: #e2edd9; color: #245c29; }
+  .btn-history:hover { background: #d4e4c9; }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .cloud-message { color: #4d594a; font-size: 13px; line-height: 1.7; margin-top: 8px; overflow-wrap: anywhere; }
+  .cloud-message.error { color: #9a2920; }
+  .history-dialog { margin: auto; width: min(600px, calc(100% - 24px)); max-height: calc(100dvh - 32px); border: none; border-radius: 16px; padding: 20px; color: #263823; }
+  .history-dialog::backdrop { background: rgba(0,0,0,0.55); }
+  .history-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .history-top h2 { font-size: 21px; color: #1B5E20; }
+  .history-close { min-height: 44px; padding: 10px 14px; font-size: 14px; letter-spacing: 0; }
+  .history-help { color: #596653; font-size: 13px; line-height: 1.7; margin: 10px 0; }
+  .history-label { display: block; font-size: 14px; font-weight: 700; margin-top: 16px; }
+  .history-search { display: flex; gap: 8px; margin: 6px 0 12px; }
+  .history-search input { min-width: 0; flex: 1; border: 1px solid #aec3a3; border-radius: 8px; padding: 10px; font: inherit; font-size: 16px; }
+  .history-search .btn { padding: 12px; letter-spacing: 0; font-size: 15px; }
+  .history-card { border: 1px solid #d6e4ce; border-radius: 12px; padding: 14px; margin: 12px 0; overflow-wrap: anywhere; }
+  .history-card h3 { font-size: 18px; color: #245c29; }
+  .history-card p { color: #596653; font-size: 13px; line-height: 1.7; margin-top: 6px; }
+  .history-card .history-amount { color: #1B5E20; font-size: 21px; font-weight: 800; }
+  .history-card .btn { margin-top: 12px; min-height: 44px; padding: 10px 14px; font-size: 14px; letter-spacing: 0; }
+  .history-more { width: 100%; min-height: 44px; margin: 10px 0; }
+  .cloud-link { display: inline-block; color: #245c29; font-size: 14px; margin-top: 12px; padding: 10px 0; }
+  .tax-switch input:focus-visible + .tax-knob { outline: 3px solid #236629; outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+
   @media (min-width: 480px) {
     .item-card-bottom { grid-template-columns: 100px 130px 1fr; }
   }
@@ -582,7 +620,7 @@
   @media print {
     body { background: #fff; padding: 0; }
     .page { box-shadow: none; border-radius: 0; }
-    .actions, .btn-add, .btn-remove { display: none !important; }
+    .actions, .btn-add, .btn-remove, .cloud-tools, .history-dialog { display: none !important; }
   }
 </style>
 </head>
@@ -598,30 +636,37 @@
     <div class="services">除草・樹木疏鋸・整姿回縮・圍籬修剪・植栽養護・病蟲害防治</div>
   </div>
 
+  <section class="cloud-tools" aria-label="雲端工單紀錄">
+    <div class="cloud-actions">
+      <button type="button" class="btn btn-cloud" id="cloudSaveBtn" onclick="saveCloudQuote()">儲存紀錄</button>
+      <button type="button" class="btn btn-history" onclick="openHistory()">查詢紀錄</button>
+    </div>
+    <p id="cloudMessage" class="cloud-message" role="status">每次儲存新增一筆雲端紀錄，手機與電腦共用。</p>
+  </section>
   <div class="info-section">
     <div class="info-item">
-      <label>客戶名稱</label>
-      <input type="text" class="info-input" data-field="clientName" value="成太.澄美社區" placeholder="輸入客戶名稱">
+      <label for="clientName">客戶名稱</label>
+      <input id="clientName" type="text" class="info-input" data-field="clientName" value="成太.澄美社區" placeholder="輸入客戶名稱" maxlength="200">
     </div>
     <div class="info-item">
-      <label>報價日期</label>
-      <input type="text" class="info-input" data-field="quoteDate" value="115.03.26" placeholder="例: 115.01.01">
+      <label for="quoteDate">報價日期</label>
+      <input id="quoteDate" type="text" class="info-input" data-field="quoteDate" value="115.03.26" placeholder="例: 115.01.01">
     </div>
     <div class="info-item">
-      <label>聯絡電話</label>
-      <input type="tel" class="info-input" data-field="phone" placeholder="輸入電話號碼">
+      <label for="phone">聯絡電話</label>
+      <input id="phone" type="tel" class="info-input" data-field="phone" placeholder="輸入電話號碼">
     </div>
     <div class="info-item">
-      <label>有效期限</label>
-      <input type="text" class="info-input" data-field="validity" value="一個月" placeholder="例: 一個月">
+      <label for="validity">有效期限</label>
+      <input id="validity" type="text" class="info-input" data-field="validity" value="一個月" placeholder="例: 一個月">
     </div>
     <div class="info-item">
-      <label>地址</label>
-      <input type="text" class="info-input" data-field="address" placeholder="輸入地址">
+      <label for="address">地址</label>
+      <input id="address" type="text" class="info-input" data-field="address" placeholder="輸入地址">
     </div>
     <div class="info-item">
-      <label>報價編號</label>
-      <input type="text" class="info-input" data-field="quoteNo" placeholder="選填">
+      <label for="quoteNo">報價／工單編號</label>
+      <input id="quoteNo" type="text" class="info-input" data-field="quoteNo" placeholder="儲存時自動編號">
     </div>
   </div>
 
@@ -637,7 +682,7 @@
 
   <div class="items-section">
     <div class="items-header">
-      <div class="items-title">工程項目 <span id="saveIndicator" style="font-size:10px;color:#888;font-weight:500;margin-left:6px;opacity:0.4;transition:opacity 0.3s;">已暫存</span></div>
+      <div class="items-title">工程項目 <span id="saveIndicator" style="font-size:11px;color:#596653;font-weight:500;margin-left:6px;">尚未儲存</span></div>
       <div class="items-count" id="itemsCount">共 0 項</div>
     </div>
     <!-- 靜態 fallback 項目:就算 JS 掛了至少看得到內容(JS 跑起來會把這些清掉重建) -->
@@ -706,8 +751,8 @@
   </div>
 
   <div class="notes-section">
-    <div class="notes-title">備註</div>
-    <textarea class="notes-area" rows="3">以上報價均為稅外加
+    <label for="quoteNotes" class="notes-title">備註</label>
+    <textarea id="quoteNotes" class="notes-area" rows="3">以上報價均為稅外加
 報價有效期限一個月</textarea>
   </div>
 
@@ -718,6 +763,25 @@
     <button type="button" class="btn btn-img" id="genBtn" onclick="genPDF()">產生報價單</button>
   </div>
 </div>
+
+<dialog id="historyDialog" class="history-dialog" aria-labelledby="historyTitle">
+  <div class="history-top">
+    <h2 id="historyTitle">客戶歷史與工單</h2>
+    <button type="button" class="btn btn-clear history-close" onclick="document.getElementById('historyDialog').close()">關閉</button>
+  </div>
+  <p class="history-help">查看歷次報價與工程紀錄。同名客戶請核對電話、地址。</p>
+  <form onsubmit="event.preventDefault(); searchCloudHistory(false)">
+    <label for="historySearch" class="history-label">搜尋客戶或工單</label>
+    <div class="history-search">
+      <input id="historySearch" type="search" placeholder="客戶名稱、電話、地址或工單編號" maxlength="200">
+      <button type="submit" id="historySearchBtn" class="btn btn-cloud">搜尋</button>
+    </div>
+  </form>
+  <p id="historyMessage" class="cloud-message" role="status"></p>
+  <div id="historyList"></div>
+  <button type="button" id="historyMore" class="btn btn-history history-more" onclick="searchCloudHistory(true)" hidden>載入更多紀錄</button>
+  <a id="spreadsheetLink" class="cloud-link" target="_blank" rel="noopener" hidden>開啟 Google 雲端工單表</a>
+</dialog>
 
 <div class="overlay" id="overlay">
   <div class="overlay-tip" id="overlayTip"></div>
@@ -847,7 +911,7 @@ function onTaxToggle() {
 }
 
 function clearAll() {
-  if (!confirm('確定要清空所有資料嗎?(暫存也會一併清掉)')) return;
+  if (!confirm('確定要清空目前畫面嗎？已儲存的雲端歷史紀錄會保留。')) return;
   var inputs = document.querySelectorAll('.info-input');
   for (var i = 0; i < inputs.length; i++) inputs[i].value = '';
   itemsEl.innerHTML = '';
@@ -857,6 +921,7 @@ function clearAll() {
   markPDFStale();
   clearDraft();
   addItem();
+  cloudNotice('已清空目前畫面，可填寫新的報價單。');
 }
 
 // 出圖前:把 input/textarea 換成 span/div,避開 html2canvas 對 placeholder
@@ -1389,9 +1454,14 @@ function shareImage() {
   }
 }
 
-// ===== 自動暫存 =====
-var STORAGE_KEY = 'tomei_quote_draft_v1';
+// ===== 工單編輯與雲端紀錄 =====
 var saveTimer = null;
+var cloudSavedSignature = null;
+var cloudPendingSave = null;
+var historyCursor = 0;
+var historyQuery = '';
+var historyRequest = 0;
+var cloudSaving = false;
 
 function collectFormData() {
   var data = { info: {}, items: [], notes: '', taxOn: taxEnabled() };
@@ -1414,37 +1484,13 @@ function collectFormData() {
 }
 
 function autoSave() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      data: collectFormData(),
-      savedAt: new Date().toISOString()
-    }));
-    var ind = document.getElementById('saveIndicator');
-    if (ind) {
-      ind.textContent = '已暫存';
-      ind.style.opacity = '1';
-      clearTimeout(ind._fadeTimer);
-      ind._fadeTimer = setTimeout(function(){ ind.style.opacity = '0.4'; }, 1500);
-    }
-  } catch (e) {
-    // localStorage 可能滿/被禁,靜默失敗
-  }
+  var saved = cloudSavedSignature === getFormSignature();
+  document.getElementById('saveIndicator').textContent = saved ? '已存入雲端' : '尚未儲存';
 }
 
 function scheduleAutoSave() {
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(autoSave, 400);  // 打字停 0.4 秒才存,避免每按鍵都寫
-}
-
-function loadDraft() {
-  try {
-    var raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    var parsed = JSON.parse(raw);
-    return parsed && parsed.data ? parsed : null;
-  } catch (e) {
-    return null;
-  }
+  saveTimer = setTimeout(autoSave, 100);
 }
 
 function applyDraft(draft) {
@@ -1472,18 +1518,148 @@ function applyDraft(draft) {
 }
 
 function clearDraft() {
-  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  cloudSavedSignature = null;
+  cloudPendingSave = null;
 }
 
 function attachAutoSave() {
-  // 任何 input/textarea 變動觸發自動存
+  // 編輯時只標示尚未儲存；正式紀錄由使用者主動存入 Google。
   document.addEventListener('input', function(e) {
     var t = e.target;
-    if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') {
+    if (t.closest('#page') && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) {
       markPDFStale();
       scheduleAutoSave();
     }
   });
+}
+
+function cloudNotice(message, error) {
+  var el = document.getElementById('cloudMessage');
+  el.textContent = message;
+  el.classList.toggle('error', !!error);
+}
+
+function callCloud(name, args) {
+  return new Promise(function(resolve, reject) {
+    if (!(window.google && google.script && google.script.run)) {
+      reject(new Error('請從 Google 雲端工單頁面操作儲存與查詢。'));
+      return;
+    }
+    var timer = setTimeout(function() { reject(new Error('連線時間較久，請重試；重複按儲存不會新增同一筆紀錄。')); }, 45000);
+    var runner = google.script.run.withSuccessHandler(function(result) {
+      clearTimeout(timer); resolve(result);
+    }).withFailureHandler(function(error) {
+      clearTimeout(timer); reject(new Error(error.message || '雲端連線失敗，請稍後再試。'));
+    });
+    runner[name].apply(runner, args);
+  });
+}
+
+async function saveCloudQuote() {
+  if (cloudSaving) return;
+  var data = collectFormData();
+  if (!data.info.clientName.trim()) {
+    cloudNotice('請先填寫客戶名稱，再儲存工單。', true);
+    document.getElementById('clientName').focus();
+    return;
+  }
+  var signature = JSON.stringify(data);
+  if (cloudSavedSignature === signature) {
+    cloudNotice('這份內容已存入雲端；修改後再儲存，會新增一筆歷史紀錄。');
+    return;
+  }
+  if (!cloudPendingSave || cloudPendingSave.signature !== signature) {
+    cloudPendingSave = { id: crypto.randomUUID(), signature: signature };
+  }
+  var button = document.getElementById('cloudSaveBtn');
+  cloudSaving = true;
+  button.disabled = true;
+  button.textContent = '儲存中…';
+  cloudNotice('正在儲存到 Google 雲端…');
+  try {
+    var record = await callCloud('saveQuote', [{ id: cloudPendingSave.id, data: data }]);
+    if (getFormSignature() === signature) {
+      applyDraft({ data: record.data });
+      cloudSavedSignature = getFormSignature();
+      markPDFStale();
+      cloudNotice('已儲存：' + record.data.info.clientName + '・' + record.data.info.quoteNo);
+    } else {
+      cloudNotice('送出時的內容已存入雲端；你剛才的新修改尚未儲存。');
+    }
+    autoSave();
+  } catch (error) {
+    cloudNotice(error.message + ' 畫面內容仍保留。', true);
+  } finally {
+    cloudSaving = false;
+    button.disabled = false;
+    button.textContent = '儲存紀錄';
+  }
+}
+
+function openHistory() {
+  document.getElementById('historyDialog').showModal();
+  document.getElementById('historySearch').value = document.getElementById('clientName').value.trim();
+  searchCloudHistory(false);
+}
+
+function historyCard(record) {
+  var card = createPdfEl('article', 'history-card');
+  var info = record.data.info;
+  card.appendChild(createPdfEl('h3', '', info.clientName));
+  card.appendChild(createPdfEl('p', '', '工單 ' + info.quoteNo));
+  card.appendChild(createPdfEl('p', '', '報價日期：' + (info.quoteDate || '未填寫') + '｜儲存：' + new Date(record.createdAt).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })));
+  card.appendChild(createPdfEl('p', '', '電話：' + (info.phone || '未填寫') + '｜地址：' + (info.address || '未填寫')));
+  card.appendChild(createPdfEl('p', '', record.data.items.map(function(item) { return item.desc; }).join('、')));
+  card.appendChild(createPdfEl('p', 'history-amount', fmt(record.total) + (record.data.taxOn ? '（含稅）' : '（未稅）')));
+  var button = createPdfEl('button', 'btn btn-history', '載入查看／再次報價');
+  button.type = 'button';
+  button.addEventListener('click', function() {
+    if (cloudSaving) { alert('目前正在儲存，請等候完成。'); return; }
+    if (cloudSavedSignature !== getFormSignature() && !confirm('目前畫面尚未儲存。確定改為載入這筆歷史工單嗎？')) return;
+    applyDraft({ data: record.data });
+    cloudSavedSignature = getFormSignature();
+    cloudPendingSave = null;
+    markPDFStale();
+    autoSave();
+    document.getElementById('historyDialog').close();
+    cloudNotice('已載入 ' + info.quoteNo + '。修改後儲存會新增紀錄，原紀錄保留。');
+    document.getElementById('clientName').focus();
+  });
+  card.appendChild(button);
+  return card;
+}
+
+async function searchCloudHistory(more) {
+  var message = document.getElementById('historyMessage');
+  var list = document.getElementById('historyList');
+  var moreButton = document.getElementById('historyMore');
+  if (!more) {
+    historyQuery = document.getElementById('historySearch').value.trim();
+    historyCursor = 0;
+    list.replaceChildren();
+  }
+  var request = ++historyRequest;
+  moreButton.hidden = true;
+  message.classList.remove('error');
+  message.textContent = '正在查詢 Google 雲端紀錄…';
+  try {
+    var result = await callCloud('searchQuotes', [historyQuery, historyCursor]);
+    if (request !== historyRequest) return;
+    result.records.forEach(function(record) { list.appendChild(historyCard(record)); });
+    historyCursor = result.nextCursor;
+    moreButton.hidden = !historyCursor;
+    message.textContent = list.children.length ? '已顯示 ' + list.children.length + ' 筆紀錄，最新儲存的排在前面。' : (historyQuery ? '找不到符合的紀錄，清除搜尋文字可查看全部工單。' : '還沒有歷史紀錄。填寫報價單後，按「儲存紀錄」建立第一筆。');
+    var link = document.getElementById('spreadsheetLink');
+    if (/^https:\/\/docs\.google\.com\/spreadsheets\/d\//.test(result.spreadsheetUrl)) {
+      link.href = result.spreadsheetUrl;
+      link.hidden = false;
+    }
+  } catch (error) {
+    if (request !== historyRequest) return;
+    message.textContent = error.message;
+    message.classList.add('error');
+    moreButton.hidden = !(more && historyCursor);
+  }
 }
 
 function closeOverlay() {
@@ -1497,31 +1673,15 @@ function __init() {
     // 清掉 HTML 靜態 fallback 項目(JS 能跑,就用 JS 動態重建)
     var fallbacks = itemsEl.querySelectorAll('[data-fallback]');
     for (var i = 0; i < fallbacks.length; i++) fallbacks[i].remove();
-    // 試還原暫存草稿
-    var draft = loadDraft();
-    var loadedFromDraft = false;
-    if (draft) {
-      try {
-        applyDraft(draft);
-        loadedFromDraft = true;
-      } catch (e) {
-        // 還原失敗就走預設
-      }
-    }
-    if (!loadedFromDraft) {
-      for (var j = 0; j < sampleData.length; j++) addItem(sampleData[j]);
-    }
-    // 啟用自動暫存
+    for (var j = 0; j < sampleData.length; j++) addItem(sampleData[j]);
+    // 只追蹤畫面修改，歷史紀錄一律儲存在 Google 雲端。
     attachAutoSave();
     // 成功:把診斷橫幅改成成功訊息並 3 秒後隱藏
     if (diag) {
       diag.style.background = '#d1e7dd';
       diag.style.color = '#0f5132';
       diag.style.borderBottom = '1px solid #badbcc';
-      var msg = loadedFromDraft
-        ? ('已還原上次暫存(' + new Date(draft.savedAt).toLocaleString('zh-TW') + ')')
-        : '載入完成,輸入時會自動暫存';
-      diag.innerHTML = msg;
+      diag.textContent = '載入完成，填寫後請按「儲存紀錄」存入雲端。';
       setTimeout(function(){ diag.style.display = 'none'; }, 3500);
     }
   } catch (e) {
